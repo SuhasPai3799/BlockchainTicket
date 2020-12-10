@@ -84,7 +84,7 @@ App = {
       // Update loading state
       App.setLoading(false)
     },
-  
+    // Can implement sell ticket for each particular ticket (As opposed to first ticket available)
     renderTasks: async () => {
       // Load the total task count from the blockchain
       const taskCount = await App.todoList.taskCount()
@@ -98,40 +98,79 @@ App = {
       {
     	  const latest_tick = await App.tickets.tickets(i)
 		  console.log(latest_tick)
-	  }
-      const $taskTemplate = $('.taskTemplate')
-      //console.log(taskCount)
-      // Render out each task with a new task template
-      for (var i = 1; i <= taskCount; i++) {
-        // Fetch the task data from the blockchain
-        const task = await App.todoList.tasks(i)
-        const taskId = task[0].toNumber()
-        const taskContent = task[1]
-        const taskCompleted = task[2]
-        //console.log(task[3])
-  
-        // Create the html for the task
+    }
+    const $taskTemplate = $('.taskTemplate')
+      for(var i = 0;i<ticketCount;i++)
+      {
+        const latest_tick = await App.tickets.tickets(i)
         const $newTaskTemplate = $taskTemplate.clone()
-        $newTaskTemplate.find('.content').html(taskContent)
-        $newTaskTemplate.find('input')
-                        .prop('name', taskId)
-                        .prop('checked', taskCompleted)
-                        // .on('click', App.toggleCompleted)
-  
-        // Put the task in the correct list
-        if (taskCompleted) {
-          $('#completedTaskList').append($newTaskTemplate)
-        } else {
+        if(latest_tick[0] == App.account)
+        {
+          
+          $newTaskTemplate.find('.content').html(i)
           $('#taskList').append($newTaskTemplate)
+          $newTaskTemplate.show()
         }
-  
-        // Show the task
-        $newTaskTemplate.show()
+        
       }
+      var ul = document.getElementById("redeemList");
+      
+      const $redeemTemplate = $('.redeemTemplate')
+      for(var i=0;i<ticketCount;i++)
+      {
+        const latest_tick = await App.tickets.tickets(i)
+        const $newredeemTemplate = $redeemTemplate.clone()
+        if(latest_tick[3] == App.account)
+        {
+          var li = document.createElement("li");
+          li.appendChild(document.createTextNode(i));
+          var button = document.createElement("button");
+          button.innerHTML = "Accept";
+          button.setAttribute("id",i)
+          button.setAttribute("onclick",`App.acceptTicket(${i})`)
+          li.appendChild(button);
+          
+          ul.appendChild(li);
+        }
+      }
+      var closebtns = document.getElementsByClassName("gg");
+      for (i = 0; i < closebtns.length; i++) {
+        console.log(closebtns[i].setAttribute("innerHTML",i+10))
+      };
+      
+      // //console.log(taskCount)
+      // // Render out each task with a new task template
+      // for (var i = 1; i <= taskCount; i++) {
+      //   // Fetch the task data from the blockchain
+      //   const task = await App.todoList.tasks(i)
+      //   const taskId = task[0].toNumber()
+      //   const taskContent = task[1]
+      //   const taskCompleted = task[2]
+      //   //console.log(task[3])
+  
+      //   // Create the html for the task
+      //   const $newTaskTemplate = $taskTemplate.clone()
+      //   $newTaskTemplate.find('.content').html(taskContent)
+      //   $newTaskTemplate.find('input')
+      //                   .prop('name', taskId)
+      //                   .prop('checked', taskCompleted)
+      //                   // .on('click', App.toggleCompleted)
+  
+      //   // Put the task in the correct list
+      //   if (taskCompleted) {
+      //     $('#completedTaskList').append($newTaskTemplate)
+      //   } else {
+      //     $('#taskList').append($newTaskTemplate)
+      //   }
+        
+      
+      //   // Show the task
+      //   $newTaskTemplate.show()
+      // }
 	},
 	buyTicket : async () => {
 		App.setLoading(true)
-		await App.tickets.deposit({
+		await App.tickets.buyTicket({
 			from: App.account,
 			value: 1000000000000000000,
 			gas: "4712388"
@@ -142,7 +181,24 @@ App = {
 		App.setLoading(true)
 		await App.tickets.redeem_to_pool(App.account)
 		window.location.reload()
-	},
+  },
+  sellTransfer : async () => {
+    App.setLoading(true)
+    const TransferAddr = $('#newTask').val()
+    console.log(TransferAddr)
+    await App.tickets.sell_to(TransferAddr)
+    window.location.reload()
+
+  },
+  acceptTicket : async (ticket_id) => {
+    App.setLoading(true)
+ 
+    console.log(ticket_id)
+    
+    window.location.reload()
+  },
+
+
     createTask: async () => {
         App.setLoading(true)
         console.log(App.account)

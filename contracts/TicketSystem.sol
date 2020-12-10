@@ -3,11 +3,12 @@ contract TicketSystem{
   address payable public recipient; 
   uint public tot_tickets = 40;
   uint tick_price = 1 ether;
+  address payable null_addr = address(0);
   struct Ticket{
     address payable owner_id;
     string movie_id;
     string ticket_state;
-    string sell_to;
+    address payable sell_to;
 
   } 
   mapping(uint => Ticket) public tickets;
@@ -16,7 +17,7 @@ contract TicketSystem{
   
         for (uint i = 0; i < tot_tickets; i++)
         {
-            tickets[i] = Ticket(address (0),"N/A","available","anyone");
+            tickets[i] = Ticket(null_addr,"N/A","available",null_addr);
         }
     }
  function redeem_to_pool(address payable owner_id) external 
@@ -26,9 +27,9 @@ contract TicketSystem{
     {
       if(tickets[i].owner_id == owner_id)
       {
-        tickets[i].owner_id = address(0);
+        tickets[i].owner_id = null_addr;
         tickets[i].ticket_state = "available";
-        tickets[i].sell_to = "anyone";
+        tickets[i].sell_to = null_addr;
         owner_id.transfer(1 ether);
         break;
 
@@ -38,7 +39,7 @@ contract TicketSystem{
  function balanceOf() external view returns (uint){
      return address(this).balance;
  }
- function deposit() public payable {
+ function buyTicket() public payable {
     if(msg.value>=tick_price)
     {
       bool found = false;
@@ -85,5 +86,47 @@ contract TicketSystem{
  function invest() external payable{
 
  }
+
+// Sell_to -> A ticket owner can sell his ticket to a some guy with a particular address
+// Claim ticket -> If someone wants to sell you his ticket, you can claim it. This function completes two transactions.
+ function sell_to(address payable addr) public 
+ {
+    for(uint i=0; i < tot_tickets ; i++)
+    {
+      if(tickets[i].owner_id == msg.sender && keccak256(bytes(tickets[i].ticket_state)) == keccak256(bytes("unavailable")))
+      {
+        tickets[i].sell_to = addr;
+        tickets[i].ticket_state = "up_for_transfer";
+        break;
+      }
+    }
+ }
+
+function acceptTicket(uint ticket_id) external payable
+{
+    if(msg.value>=tick_price)
+    {
+      if(tickets[ticket_id].sell_to == msg.sender)
+      {
+        msg.sender.transfer(msg.value-tick_price);
+        address payable addr = tickets[ticket_id].owner_id;
+        addr.transfer(tick_price);
+        tickets[ticket_id].owner_id = msg.sender;
+        tickets[ticket_id].ticket_state = "unavailable";
+        tickets[ticket_id].sell_to = null_addr;
+      }
+      else
+      {
+        msg.sender.transfer(msg.value);
+      }
+    }
+    else
+    {
+        msg.sender.transfer(msg.value);
+    }
+}
+  
+
+ 
 
 }
