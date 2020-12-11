@@ -32,8 +32,11 @@
       }
 
       ul {
-        margin-bottom: 0px;
+        margin-bottom: 10px;
       }
+      li.menu-item {
+   margin:0 0 10px 0;   
+}
 
       #completedTaskList .content {
         color: grey;
@@ -43,7 +46,7 @@
   </head>
   <body>
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="http://www.dappuniversity.com/free-download" target="_blank">Dapp University | Todo List</a>
+      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href = "#">IIT Madras Ticketing System</a>
       <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap d-none d-sm-none d-sm-block">
           <small><a class="nav-link" href="#"><span id="account"></span></a></small>
@@ -61,30 +64,32 @@
               <input id="newTask" type="text" class="form-control" placeholder="Add task..." required>
               <input type="submit" hidden="">
             </form> -->
+            <div class = "text-center">
             <form onSubmit="App.sellTransfer(); return false;">
-                <input id="newTask" type="text" class="form-control" placeholder="Sell to" required>
-                <button type="submit">Sell my ticket!</button>
-                
-            </form>
-            <form onSubmit="App.buyTicket(); return false;">
-              <button type="submit">Buy Ticket!</button>
-            </form>
-            <form onSubmit="App.sellTicket(); return false;">
-              <button type="submit">Sell Ticket!</button>
-            </form>
-
-            <ul id="taskList" class="list-unstyled">
-              <h7>My tickets</h7>
-              <div class="taskTemplate" style="display: none">
-                <label>
-                  
-                  <span class="content">Task content goes here...</span>
-                </label>
+                <input id="newTask" type="text" class="form-control" placeholder="Transfer to" required>
+                <div class = "text-center">
+                <button class ="btn btn-primary" style = "margin-top:10px"type="submit">Transfer!</button>
               </div>
-            </ul>
-            <ul id="redeemList" style="list-style-type:none;">
-              <h7>Redeemable tickets</h7>
-            </ul>
+            </form>
+          </div>
+          <br>
+
+          <div class = "text-center">
+            <form onSubmit="App.buyTicket(); return false;">
+              <button class="btn btn-secondary" type="submit">Buy Ticket!</button>
+            </form>
+          </div>
+          <br>
+
+          <div class = "text-center">
+            <form onSubmit="App.sellTicket(); return false;">
+              <button class="btn btn-warning" type="submit">Sell Ticket to public!</button>
+            </form>
+          </div>
+          <br>
+          <br>
+          
+            
             <!-- <ul id="redeemList" class="list-unstyled">
               <h7>Redeemable tickets</h7>
               <div class="redeemTemplate" style="display: none">
@@ -99,12 +104,40 @@
             <ul id="completedTaskList" class="list-unstyled">
             </ul>
           </div>
+        
         </main>
+
       </div>
+      <div class="row">
+      
+        <div class="col-sm-4">
+        <ul id="ticketList" style="list-style-type:none;">
+          <h7>My tickets</h7>
+        </ul>
+        </div>
+
+        <div class="col-sm-4">
+          <ul id="transferList" style="list-style-type:none;">
+            <h7>Tickets up for transfer</h7>
+          </ul>
+        </div>  
+
+        <div class="col-sm-4">
+        <ul id="redeemList" style="list-style-type:none;">
+          <h7>Redeemable tickets</h7>
+        </ul>
+        </div>  
+      </div>
+      
     </div>
+    
+      
+    
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="vendor/truffle-contract/dist/truffle-contract.js"></script>

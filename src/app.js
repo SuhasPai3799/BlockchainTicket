@@ -100,16 +100,50 @@ App = {
 		  console.log(latest_tick)
     }
     const $taskTemplate = $('.taskTemplate')
+    var ul1 = document.getElementById("ticketList");
       for(var i = 0;i<ticketCount;i++)
       {
         const latest_tick = await App.tickets.tickets(i)
         const $newTaskTemplate = $taskTemplate.clone()
-        if(latest_tick[0] == App.account)
+        if(latest_tick[0] == App.account && latest_tick[2]=="unavailable")
         {
+          var li = document.createElement("li");
+          var button = document.createElement("button");
+          button.innerHTML = `Ticket ID : ${i}`;
+          button.setAttribute("class","btn btn-info")
+          li.appendChild(button);
+          ul1.appendChild(li);
           
-          $newTaskTemplate.find('.content').html(i)
-          $('#taskList').append($newTaskTemplate)
-          $newTaskTemplate.show()
+        }
+        
+      }
+      var ul2 = document.getElementById("transferList");
+      for(var i = 0;i<ticketCount;i++)
+      {
+        const latest_tick = await App.tickets.tickets(i)
+        const $newTaskTemplate = $taskTemplate.clone()
+        if(latest_tick[0] == App.account && (latest_tick[2]=="up_for_transfer" || latest_tick[2]=="available"))
+        {
+          var li = document.createElement("li");
+          var button = document.createElement("button");
+          var res = `Withdraw - Ticket ID : ${i} `
+          var tick_state = latest_tick[2]
+          
+          if(tick_state == "available")
+          {
+            res = res.concat(" : Public Transfer ")
+          }
+          else
+          {
+            res = res.concat(" : Private Transfer")
+          }
+          button.innerHTML = res;
+          button.setAttribute("class","btn btn-info")
+          button.setAttribute("style","margin-top:5px")
+          button.setAttribute("onclick",`App.withdrawTransfer(${i})`)
+          li.appendChild(button);
+          ul2.appendChild(li);
+          
         }
         
       }
@@ -123,9 +157,10 @@ App = {
         if(latest_tick[3] == App.account)
         {
           var li = document.createElement("li");
-          li.appendChild(document.createTextNode(i));
+          
           var button = document.createElement("button");
-          button.innerHTML = "Accept";
+          button.innerHTML = `Accept - Ticket ID:${i}`;
+          button.setAttribute("class","btn btn-success")
           button.setAttribute("id",i)
           button.setAttribute("onclick",`App.acceptTicket(${i})`)
           li.appendChild(button);
@@ -194,7 +229,17 @@ App = {
     App.setLoading(true)
  
     console.log(ticket_id)
-    
+    await App.tickets.acceptTicket(ticket_id,
+      {
+        from: App.account,
+			value: 1000000000000000000,
+			gas: "4712388"
+      }
+    )
+    window.location.reload()
+  },
+  withdrawTransfer : async (ticket_id) =>{
+    await App.tickets.withdrawTransfer(ticket_id)
     window.location.reload()
   },
 

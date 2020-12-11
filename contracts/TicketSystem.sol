@@ -25,12 +25,11 @@ contract TicketSystem{
     //buyer_id.transfer(1 ether);
     for(uint i=0; i < tot_tickets ; i++)
     {
-      if(tickets[i].owner_id == owner_id)
+      if(tickets[i].owner_id == owner_id && keccak256(bytes(tickets[i].ticket_state)) == keccak256(bytes("unavailable")))
       {
-        tickets[i].owner_id = null_addr;
+        
         tickets[i].ticket_state = "available";
         tickets[i].sell_to = null_addr;
-        owner_id.transfer(1 ether);
         break;
 
       }
@@ -45,8 +44,18 @@ contract TicketSystem{
       bool found = false;
       for(uint i = 0; i < tot_tickets; i++ )
       {
-          if(keccak256(bytes(tickets[i].ticket_state)) == keccak256(bytes("available")))
+          if(keccak256(bytes(tickets[i].ticket_state)) == keccak256(bytes("available")) && tickets[i].owner_id == null_addr)
           {
+            tickets[i].owner_id = msg.sender;
+            tickets[i].ticket_state = "unavailable";
+            msg.sender.transfer(msg.value - tick_price);
+            found = true;
+            break;
+          }
+          else if(keccak256(bytes(tickets[i].ticket_state)) == keccak256(bytes("available")))
+          {
+            address payable owner_id = tickets[i].owner_id;
+            owner_id.transfer(tick_price);
             tickets[i].owner_id = msg.sender;
             tickets[i].ticket_state = "unavailable";
             msg.sender.transfer(msg.value - tick_price);
@@ -125,8 +134,11 @@ function acceptTicket(uint ticket_id) external payable
         msg.sender.transfer(msg.value);
     }
 }
+function withdrawTransfer(uint ticket_id) public
+{
+    tickets[ticket_id].ticket_state = "unavailable";
+}
   
-
  
 
 }
