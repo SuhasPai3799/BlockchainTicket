@@ -20,20 +20,16 @@ contract TicketSystem{
             tickets[i] = Ticket(null_addr,"N/A","available",null_addr);
         }
     }
- function redeem_to_pool(address payable owner_id) external 
+ function redeem_to_pool(address payable owner_id, uint ticket_id) external 
  {
     //buyer_id.transfer(1 ether);
-    for(uint i=0; i < tot_tickets ; i++)
-    {
-      if(tickets[i].owner_id == owner_id && keccak256(bytes(tickets[i].ticket_state)) == keccak256(bytes("unavailable")))
+    
+      if(tickets[ticket_id].owner_id == owner_id && keccak256(bytes(tickets[ticket_id].ticket_state)) == keccak256(bytes("unavailable")) )
       {
         
-        tickets[i].ticket_state = "available";
-        tickets[i].sell_to = null_addr;
-        break;
-
+        tickets[ticket_id].ticket_state = "available";
+        tickets[ticket_id].sell_to = null_addr;
       }
-    }
  }
  function balanceOf() external view returns (uint){
      return address(this).balance;
@@ -98,17 +94,13 @@ contract TicketSystem{
 
 // Sell_to -> A ticket owner can sell his ticket to a some guy with a particular address
 // Claim ticket -> If someone wants to sell you his ticket, you can claim it. This function completes two transactions.
- function sell_to(address payable addr) public 
+ function sell_to(address payable addr, uint ticket_id) public 
  {
-    for(uint i=0; i < tot_tickets ; i++)
-    {
-      if(tickets[i].owner_id == msg.sender && keccak256(bytes(tickets[i].ticket_state)) == keccak256(bytes("unavailable")))
+      if(tickets[ticket_id].owner_id == msg.sender && keccak256(bytes(tickets[ticket_id].ticket_state)) == keccak256(bytes("unavailable")))
       {
-        tickets[i].sell_to = addr;
-        tickets[i].ticket_state = "up_for_transfer";
-        break;
+        tickets[ticket_id].sell_to = addr;
+        tickets[ticket_id].ticket_state = "up_for_transfer";
       }
-    }
  }
 
 function acceptTicket(uint ticket_id) external payable

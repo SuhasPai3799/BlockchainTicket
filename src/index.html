@@ -67,6 +67,7 @@
             <div class = "text-center">
             <form onSubmit="App.sellTransfer(); return false;">
                 <input id="newTask" type="text" class="form-control" placeholder="Transfer to" required>
+                <input id="ticketid_transfer" type="number" style = "margin-top:5px" class="form-control" placeholder="Ticket ID" required>
                 <div class = "text-center">
                 <button class ="btn btn-primary" style = "margin-top:10px"type="submit">Transfer!</button>
               </div>
@@ -83,7 +84,8 @@
 
           <div class = "text-center">
             <form onSubmit="App.sellTicket(); return false;">
-              <button class="btn btn-warning" type="submit">Sell Ticket to public!</button>
+              <input id="ticketid_redeem" type="number" class="form-control" placeholder="Ticket ID" required>
+              <button class="btn btn-warning" style = "margin-top:10px" type="submit">Sell Ticket to public!</button>
             </form>
           </div>
           <br>

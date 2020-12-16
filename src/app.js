@@ -111,6 +111,7 @@ App = {
           var button = document.createElement("button");
           button.innerHTML = `Ticket ID : ${i}`;
           button.setAttribute("class","btn btn-info")
+          button.setAttribute("style","margin-top:5px")
           li.appendChild(button);
           ul1.appendChild(li);
           
@@ -213,15 +214,20 @@ App = {
 		window.location.reload()
 	},
 	sellTicket : async () => {
-		App.setLoading(true)
-		await App.tickets.redeem_to_pool(App.account)
+    App.setLoading(true)
+    const TransferID = $('#ticketid_redeem').val()
+    console.log(TransferID)
+		await App.tickets.redeem_to_pool(App.account, TransferID)
 		window.location.reload()
   },
   sellTransfer : async () => {
     App.setLoading(true)
     const TransferAddr = $('#newTask').val()
+    const TransferID = $('#ticketid_transfer').val()
+    
     console.log(TransferAddr)
-    await App.tickets.sell_to(TransferAddr)
+    console.log(TransferID)
+    await App.tickets.sell_to(TransferAddr,TransferID)
     window.location.reload()
 
   },
