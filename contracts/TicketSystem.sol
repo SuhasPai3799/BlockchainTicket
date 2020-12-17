@@ -129,6 +129,7 @@ function acceptTicket(uint ticket_id) external payable
 function withdrawTransfer(uint ticket_id) public
 {
     tickets[ticket_id].ticket_state = "unavailable";
+    
 }
   
  

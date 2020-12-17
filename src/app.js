@@ -58,12 +58,12 @@ App = {
       App.contracts.TodoList.setProvider(App.web3Provider)
       App.contracts.TicketSystem.setProvider(App.web3Provider)
       // Hydrate the smart contract with values from the blockchain
-      App.todoList = await App.contracts.TodoList.deployed()
+      //App.todoList = await App.contracts.TodoList.deployed()
       App.tickets  = await App.contracts.TicketSystem.deployed()
 
       
       console.log(App.contracts.TicketSystem.address)
-      console.log(App.contracts.TodoList.address)
+      
     },
   
     render: async () => {
@@ -87,13 +87,13 @@ App = {
     // Can implement sell ticket for each particular ticket (As opposed to first ticket available)
     renderTasks: async () => {
       // Load the total task count from the blockchain
-      const taskCount = await App.todoList.taskCount()
+      //const taskCount = await App.todoList.taskCount()
       const ticketCount = await App.tickets.tot_tickets()
       const gg = await App.tickets.balanceOf()
-      const gg1 =  await App.todoList.balanceOf()
+      
       console.log(ticketCount)
       console.log(gg)
-      console.log(gg1)
+      
       for(var i=0;i<5;i++)
       {
     	  const latest_tick = await App.tickets.tickets(i)
@@ -253,8 +253,8 @@ App = {
     createTask: async () => {
         App.setLoading(true)
         console.log(App.account)
-        const content = $('#newTask').val()
-        await App.todoList.createTask(content,App.account)
+        //const content = $('#newTask').val()
+        //await App.todoList.createTask(content,App.account)
         await App.tickets.deposit({
           from: App.account,
           value: 1000000000000000000,
