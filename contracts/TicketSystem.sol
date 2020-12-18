@@ -107,7 +107,7 @@ function acceptTicket(uint ticket_id) external payable
 {
     if(msg.value>=tick_price)
     {
-      if(tickets[ticket_id].sell_to == msg.sender)
+      if(tickets[ticket_id].sell_to == msg.sender && keccak256(bytes(tickets[ticket_id].ticket_state)) == keccak256(bytes("up_for_transfer")) )
       {
         msg.sender.transfer(msg.value-tick_price);
         address payable addr = tickets[ticket_id].owner_id;
@@ -129,7 +129,7 @@ function acceptTicket(uint ticket_id) external payable
 function withdrawTransfer(uint ticket_id) public
 {
     tickets[ticket_id].ticket_state = "unavailable";
-    
+    tickets[ticket_id].sell_to = null_addr;
 }
   
  
