@@ -1,5 +1,9 @@
-Project done as a part of the course evaluation - [CS6666](http://www.cse.iitm.ac.in/course_details.php?arg=MTQ2) during the Jul-Nov 2020 Semester.
+Project done as a part of the course evaluation - [CS6666](http://www.cse.iitm.ac.in/course_details.php?arg=MTQ2) during the Jul-Nov 2020 Semester. \
+![Ganache User Interface](https://github.com/SuhasPai3799/BlockchainTicket/blob/main/images/Ganache_UI.png)
+Ganache along with Metamask allows 10 miners to be simulated, starting out with 100ETH each.
 
+![User Interface](https://github.com/SuhasPai3799/BlockchainTicket/blob/main/images/User_UI_1.png)
+The User has the ability to purchase, sell, and transfer tickets. \
 Instructions to run the program
 1. Install truffle
 2. Install ganache
